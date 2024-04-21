@@ -54,7 +54,7 @@ const VideoCard: FC<VideoCardProps> = ({
           shouldPlay
           onPlaybackStatusUpdate={(playbackStatus)=>{
             // @ts-ignore
-            if(playbackStatus.didFinishPlay){
+            if(playbackStatus.didJustFinish){
               setPlay(false)
             }
           }}

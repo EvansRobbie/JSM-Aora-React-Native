@@ -52,10 +52,15 @@ const TrendingItem = ({
           resizeMode={ResizeMode.CONTAIN}
           useNativeControls
           shouldPlay
+          isMuted
           onPlaybackStatusUpdate={(playbackStatus)=>{
             // @ts-ignore
-            if(playbackStatus.didFinishPlay){
+            if(playbackStatus.didJustFinish){
               setPlay(false)
+            }
+            // @ts-ignore
+            if(playbackStatus.isBuffering){
+              <Text>Buffering...</Text>
             }
           }}
         />

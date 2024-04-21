@@ -1,29 +1,27 @@
+import React, { useState } from 'react';
 import {
-  View,
-  Text,
   FlatList,
   Image,
-  RefreshControl,
-  Alert,
-  ListRenderItem,
   ListRenderItemInfo,
+  RefreshControl,
+  Text,
+  View
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { images } from '../../constants';
+import EmptyState from '../../components/EmptyState';
 import SearchInput from '../../components/SearchInput';
 import Trending from '../../components/Trending';
-import EmptyState from '../../components/EmptyState';
+import VideoCard from '../../components/VideoCard';
+import { images } from '../../constants';
+import { useGlobalContext } from '../../context/GlobalProvider';
 import { getAllPost, getLatestVideos } from '../../lib/appwrite';
 import { useAppwrite } from '../../lib/useAppwrite';
-import VideoCard from '../../components/VideoCard';
-import { useGlobalContext } from '../../context/GlobalProvider';
 
 export interface postProps {
   $id: string;
   title: string;
   thumbnail: string;
-  avatar:string
+  avatar: string;
   video: string;
   creator: {
     username: string;
@@ -32,13 +30,14 @@ export interface postProps {
 }
 
 const Home = () => {
-  const { data: posts, loading, refetch } = useAppwrite(getAllPost);
+  const { data: posts, refetch } = useAppwrite(getAllPost);
   const { data: latestVideos } = useAppwrite(getLatestVideos);
-  const { user, setUser, setIsLoggedIn } = useGlobalContext();
+  const { user } = useGlobalContext();
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const onRefresh = async () => {
+    setRefreshing(true)
     await refetch();
-    setRefreshing(true);
+    setRefreshing(false);
     //re call videos
   };
 
@@ -64,7 +63,7 @@ const Home = () => {
                 />
               </View>
             </View>
-            <SearchInput/>
+            <SearchInput />
             <View className='w-full flex-1 pt-5 pb-8'>
               <Text className='text-gray-100 text-lg font-pregular mb-3'>
                 Latest Videos
