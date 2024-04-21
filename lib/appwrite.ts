@@ -8,20 +8,21 @@ import {
 } from 'react-native-appwrite';
 export const appwriteConfig = {
   endpoint: 'https://cloud.appwrite.io/v1',
-  plartform: 'com.robbie.aora',
+  platform: 'com.robbie.aora',
   projectId: '661c00142e2eeb14fdce',
   databaseId: '661c033fbcea4c874948',
   userCollectionId: '661c0369c20ce112f003',
   videosCollectionId: '661c038f2bf2cd7829df',
   storageid: '661c055a6baa026d4a27',
 };
+
 // Init your react-native SDK
 const client = new Client();
 
 client
   .setEndpoint(appwriteConfig.endpoint)
   .setProject(appwriteConfig.projectId)
-  .setPlatform(appwriteConfig.plartform);
+  .setPlatform(appwriteConfig.platform);
 
 const account = new Account(client);
 const avatars = new Avatars(client);
