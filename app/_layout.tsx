@@ -2,6 +2,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import React, { useEffect } from 'react';
 import { Slot, SplashScreen, Stack } from 'expo-router';
 import { useFonts } from 'expo-font';
+import { GlobalProvider } from '../context/GlobalProvider';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -20,7 +21,7 @@ const RootLayout = () => {
 
   useEffect(() => {
     if (error) throw error;
-  
+
     if (fontsLoaded) {
       SplashScreen.hideAsync();
     }
@@ -31,12 +32,16 @@ const RootLayout = () => {
   }
 
   return (
-    <Stack>
-      {/* <Text>Header</Text>
+    <GlobalProvider>
+      <Stack>
+        {/* <Text>Header</Text>
   <Slot/>
   <Text>Footer</Text> */}
-      <Stack.Screen name='index' options={{ headerShown: false }} />
-    </Stack>
+        <Stack.Screen name='index' options={{ headerShown: false }} />
+        <Stack.Screen name='(auth)' options={{ headerShown: false }} />
+        <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
+      </Stack>
+    </GlobalProvider>
   );
 };
 
