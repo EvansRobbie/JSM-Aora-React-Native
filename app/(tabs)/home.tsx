@@ -1,4 +1,13 @@
-import { View, Text, FlatList, Image, RefreshControl, Alert } from 'react-native';
+import {
+  View,
+  Text,
+  FlatList,
+  Image,
+  RefreshControl,
+  Alert,
+  ListRenderItem,
+  ListRenderItemInfo,
+} from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
@@ -7,23 +16,37 @@ import Trending from '../../components/Trending';
 import EmptyState from '../../components/EmptyState';
 import { getAllPost } from '../../lib/appwrite';
 import { useAppwrite } from '../../lib/useAppwrite';
+import VideoCard from '../../components/VideoCard';
 
+export interface postProps {
+  $id: string;
+  title: string;
+  thumbnail:string;
+  video:string;
+  creator:{
+    username:string;
+    avatar:string;
+  }
+}
 
 const Home = () => {
-const {data:posts, loading, refetch} = useAppwrite(getAllPost)
+  const { data: posts, loading, refetch } = useAppwrite(getAllPost);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const onRefresh = async () => {
-    await refetch()
+    await refetch();
     setRefreshing(true);
     //re call videos
   };
- 
+
+
   return (
     <SafeAreaView className='bg-primary h-full'>
       <FlatList
         data={posts}
-        keyExtractor={(item) => item.$id}
-        renderItem={({ item }) => <Text className='text-white'>{item.id}</Text>}
+        keyExtractor={(item: { $id: string }) => item.$id}
+        renderItem={({ item }: ListRenderItemInfo<postProps>) => (
+         <VideoCard video={item}/>
+        )}
         ListHeaderComponent={() => (
           <View className='my-6 px-4 space-y-6'>
             <View className='justify-between items-start flex-row mb-6'>
