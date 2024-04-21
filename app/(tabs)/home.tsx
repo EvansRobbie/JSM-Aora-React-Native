@@ -14,23 +14,24 @@ import { images } from '../../constants';
 import SearchInput from '../../components/SearchInput';
 import Trending from '../../components/Trending';
 import EmptyState from '../../components/EmptyState';
-import { getAllPost } from '../../lib/appwrite';
+import { getAllPost, getLatestVideos } from '../../lib/appwrite';
 import { useAppwrite } from '../../lib/useAppwrite';
 import VideoCard from '../../components/VideoCard';
 
 export interface postProps {
   $id: string;
   title: string;
-  thumbnail:string;
-  video:string;
-  creator:{
-    username:string;
-    avatar:string;
-  }
+  thumbnail: string;
+  video: string;
+  creator: {
+    username: string;
+    avatar: string;
+  };
 }
 
 const Home = () => {
   const { data: posts, loading, refetch } = useAppwrite(getAllPost);
+  const { data: latestVideos } = useAppwrite(getLatestVideos);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const onRefresh = async () => {
     await refetch();
@@ -38,15 +39,11 @@ const Home = () => {
     //re call videos
   };
 
-
   return (
     <SafeAreaView className='bg-primary h-full'>
       <FlatList
         data={posts}
         keyExtractor={(item: { $id: string }) => item.$id}
-        renderItem={({ item }: ListRenderItemInfo<postProps>) => (
-         <VideoCard video={item}/>
-        )}
         ListHeaderComponent={() => (
           <View className='my-6 px-4 space-y-6'>
             <View className='justify-between items-start flex-row mb-6'>
@@ -69,11 +66,12 @@ const Home = () => {
               <Text className='text-gray-100 text-lg font-pregular mb-3'>
                 Latest Videos
               </Text>
-              <Trending
-                posts={[{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }] ?? []}
-              />
+              <Trending trending={latestVideos ?? []} />
             </View>
           </View>
+        )}
+        renderItem={({ item }: ListRenderItemInfo<postProps>) => (
+          <VideoCard video={item} />
         )}
         ListEmptyComponent={() => (
           <EmptyState
