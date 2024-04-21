@@ -17,11 +17,13 @@ import EmptyState from '../../components/EmptyState';
 import { getAllPost, getLatestVideos } from '../../lib/appwrite';
 import { useAppwrite } from '../../lib/useAppwrite';
 import VideoCard from '../../components/VideoCard';
+import { useGlobalContext } from '../../context/GlobalProvider';
 
 export interface postProps {
   $id: string;
   title: string;
   thumbnail: string;
+  avatar:string
   video: string;
   creator: {
     username: string;
@@ -32,6 +34,7 @@ export interface postProps {
 const Home = () => {
   const { data: posts, loading, refetch } = useAppwrite(getAllPost);
   const { data: latestVideos } = useAppwrite(getLatestVideos);
+  const { user, setUser, setIsLoggedIn } = useGlobalContext();
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const onRefresh = async () => {
     await refetch();
@@ -51,7 +54,7 @@ const Home = () => {
                 <Text className='text-gray-100 font-pmedium text-sm '>
                   Welcome Back
                 </Text>
-                <Text className='text-white'>Robbie</Text>
+                <Text className='text-white'>{user?.username}</Text>
               </View>
               <View className='mt-1.5'>
                 <Image

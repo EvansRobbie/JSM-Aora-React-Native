@@ -13,6 +13,7 @@ interface userProps {
   $id: string;
   email: string;
   username: string;
+  avatar:string
 }
 
 interface createContextProps {

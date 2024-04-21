@@ -1,10 +1,10 @@
 import {
-    Account,
-    Avatars,
-    Client,
-    Databases,
-    ID,
-    Query,
+  Account,
+  Avatars,
+  Client,
+  Databases,
+  ID,
+  Query,
 } from 'react-native-appwrite';
 export const appwriteConfig = {
   endpoint: 'https://cloud.appwrite.io/v1',
@@ -92,40 +92,61 @@ export const getCurrentUser = async () => {
 };
 
 // get all posts
-export const getAllPost = async () =>{
+export const getAllPost = async () => {
   try {
-      const posts =  await databases.listDocuments(
-        appwriteConfig.databaseId,
-        appwriteConfig.videosCollectionId
-      )
-      return posts.documents
+    const posts = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.videosCollectionId
+    );
+    return posts.documents;
   } catch (error) {
-      throw new Error(error)
+    throw new Error(error);
   }
-}
+};
 
 // Trending
-export const getLatestVideos = async () =>{
+export const getLatestVideos = async () => {
   try {
-      const posts =  await databases.listDocuments(
-        appwriteConfig.databaseId,
-        appwriteConfig.videosCollectionId,
-        [Query.orderDesc('$createdAt', Query.limit(7))]
-      )
-      return posts.documents
+    const posts = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.videosCollectionId,
+      [Query.orderDesc('$createdAt', Query.limit(7))]
+    );
+    return posts.documents;
   } catch (error) {
-      throw new Error(error)
+    throw new Error(error);
   }
-}
-export const searchPosts = async (query:string) =>{
+};
+export const searchPosts = async (query: string) => {
   try {
-      const posts =  await databases.listDocuments(
-        appwriteConfig.databaseId,
-        appwriteConfig.videosCollectionId,
-        [Query.search('title', query)]
-      )
-      return posts.documents
+    const posts = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.videosCollectionId,
+      [Query.search('title', query)]
+    );
+    return posts.documents;
   } catch (error) {
-      throw new Error(error)
+    throw new Error(error);
   }
-}
+};
+export const getUserPosts = async (userId: string) => {
+  try {
+    const posts = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.videosCollectionId,
+      [Query.equal('creator', userId)]
+    );
+    return posts.documents;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+export const signOut = async () => {
+  try {
+    const session = await account.deleteSession('current');
+    return session;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
